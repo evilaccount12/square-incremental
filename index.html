@@ -118,12 +118,18 @@
     /* Square Generator styling */
     /* Generator Button Container for random movement */
     #generatorButtonContainer {
-      position: relative;
-      height: 80px;
-      display: flex;
-      justify-content: center; /* Center horizontally */
-      margin-bottom: 20px;
-    }
+    position: fixed;  /* Fixes it to the viewport */
+    top: 50%;  /* Center vertically */
+    left: 50%;  /* Center horizontally */
+    transform: translate(-50%, -50%);  /* Adjusts for button size */
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Keeps it above other elements */
+    width: 100%; /* Prevents shifting */
+}
+
     #generatorButton {
       position: absolute;
       background: linear-gradient(45deg, #6a11cb, #2575fc);
