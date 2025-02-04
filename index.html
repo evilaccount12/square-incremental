@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Square Simulator</title>
+  <style>
+    /* Fun, vibrant background gradient */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    /* Main container which expands as needed */
+    #game {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      padding: 30px 20px;
+      text-align: center;
+      display: inline-block;
+      max-width: 90%;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #e63946;
+      text-shadow: 1px 1px 0 #fff;
+    }
+
+    /* Tab Buttons */
+    #tab-buttons {
+      margin-bottom: 20px;
+    }
+
+    .tab-button {
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      padding: 10px 15px;
+      margin: 0 5px;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .tab-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+    
+    .tab-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Tab content sections */
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Main Square Styling (fixed size) */
+    #square {
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle at top left, #1e90ff, #3742fa);
+      margin: 20px auto;
+      border-radius: 15px;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s;
+      position: relative;
+    }
+
+    /* Pop animation when clicking/upgrading */
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    #square.pop {
+      animation: pop 0.3s ease-out;
+    }
+
+    /* Upgrades section styling */
+    .upgrade-button {
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      padding: 10px 15px;
+      margin: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s, transform 0.2s;
+    }
+    .upgrade-button:hover {
+      transform: translateY(-2px);
+    }
+    .upgrade-info {
+      font-size: 1.1em;
+      margin: 8px 0;
+    }
+
+    /* Square Generator styling */
+    /* Generator Button Container for random movement */
+    #generatorButtonContainer {
+      position: relative;
+      height: 80px;
+      margin-bottom: 20px;
+    }
+    #generatorButton {
+      position: absolute;
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      padding: 10px 15px;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s, transform 0.2s;
+    }
+    #generatorButton:hover {
+      transform: translateY(-2px);
+    }
+    #squaresGrid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .small-square {
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle at top left, #1e90ff, #3742fa);
+      border-radius: 5px;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <!-- Tab Buttons -->
+    <div id="tab-buttons">
+      <button id="mainTabButton" class="tab-button">Main Game</button>
+      <button id="generatorTabButton" class="tab-button" disabled>Square Generator</button>
+    </div>
+
+    <!-- Main Game Tab -->
+    <div id="mainGameTab" class="tab-content active">
+      <h1>Square Simulator</h1>
+      <div id="square" title="Click me to earn coins!"></div>
+      <p class="upgrade-info">Square Quality: <span id="quality">1</span></p>
+      <p class="upgrade-info">Coins: <span id="coins">0</span></p>
+      <p class="upgrade-info">Multiplier: <span id="multiplier">1.0</span>x</p>
+
+      <div id="upgrades">
+        <button id="upgradeQuality" class="upgrade-button">
+          Upgrade Square Quality (Cost: <span id="upgradeCost">10</span> coins)
+        </button>
+        <br>
+        <button id="upgradeMultiplier" class="upgrade-button">
+          Buy Multiplier Upgrade (Cost: <span id="multiplierCost">50</span> coins)
+        </button>
+      </div>
+    </div>
+
+    <!-- Square Generator Tab (unlocked at 1,000 coins) -->
+    <div id="generatorTab" class="tab-content">
+      <h1>Square Generator</h1>
+      <p>Click the button to generate a new square. Each square increases your clicking power!</p>
+      <!-- Generator button container to allow movement -->
+      <div id="generatorButtonContainer">
+        <button id="generatorButton">Generate New Square</button>
+      </div>
+      <div id="squaresGrid"></div>
+    </div>
+  </div>
+
+  <script>
+    // -------------------------------
+    // Game State Variables
+    // -------------------------------
+    let coins = 0;
+    let quality = 1;
+    let upgradeCost = 10;
+    let multiplier = 1.0;
+    let multiplierCost = 50;
+    // extraSquares are generated via the Square Generator tab.
+    let extraSquares = 0;
+    // Flag to check if generator has been unlocked already.
+    let generatorUnlocked = false;
+
+    // -------------------------------
+    // DOM Elements
+    // -------------------------------
+    const square = document.getElementById("square");
+    const coinsDisplay = document.getElementById("coins");
+    const qualityDisplay = document.getElementById("quality");
+    const upgradeCostDisplay = document.getElementById("upgradeCost");
+    const multiplierDisplay = document.getElementById("multiplier");
+    const multiplierCostDisplay = document.getElementById("multiplierCost");
+
+    const upgradeQualityButton = document.getElementById("upgradeQuality");
+    const upgradeMultiplierButton = document.getElementById("upgradeMultiplier");
+
+    // Tab buttons
+    const mainTabButton = document.getElementById("mainTabButton");
+    const generatorTabButton = document.getElementById("generatorTabButton");
+    // Tab content divs
+    const mainGameTab = document.getElementById("mainGameTab");
+    const generatorTab = document.getElementById("generatorTab");
+
+    // Generator tab elements
+    const generatorButton = document.getElementById("generatorButton");
+    const generatorButtonContainer = document.getElementById("generatorButtonContainer");
+    const squaresGrid = document.getElementById("squaresGrid");
+
+    // -------------------------------
+    // Utility Functions
+    // -------------------------------
+    // Calculate base coin gain (from quality and multiplier)
+    function coinGain() {
+      return quality * multiplier;
+    }
+
+    // Effective click power = base coin gain multiplied by the number of squares (main square + generated ones)
+    function effectiveCoinGain() {
+      return coinGain() * (1 + extraSquares);
+    }
+
+    // Update all display elements
+    function updateDisplay() {
+      coinsDisplay.textContent = coins.toFixed(1);
+      qualityDisplay.textContent = quality;
+      upgradeCostDisplay.textContent = upgradeCost;
+      multiplierDisplay.textContent = multiplier.toFixed(1);
+      multiplierCostDisplay.textContent = multiplierCost;
+      
+      // Unlock the generator tab if coins >= 1000 (only once)
+      if (coins >= 1000 && !generatorUnlocked) {
+        generatorUnlocked = true;
+        generatorTabButton.disabled = false;
+        alert("Congratulations! The Square Generator has been unlocked.");
+      }
+    }
+
+    // Render the grid of generated squares in the generator tab
+    function updateSquaresGrid() {
+      squaresGrid.innerHTML = ''; // clear grid
+      for (let i = 0; i < extraSquares; i++) {
+        const sq = document.createElement('div');
+        sq.className = 'small-square';
+        squaresGrid.appendChild(sq);
+      }
+    }
+
+    // Animate the main square with a pop effect
+    function animateSquare() {
+      square.classList.add('pop');
+      setTimeout(() => {
+        square.classList.remove('pop');
+      }, 300);
+    }
+
+    // Randomly move the generator button within its container
+    function moveGeneratorButton() {
+      const containerWidth = generatorButtonContainer.clientWidth;
+      const containerHeight = generatorButtonContainer.clientHeight;
+      const buttonWidth = generatorButton.offsetWidth;
+      const buttonHeight = generatorButton.offsetHeight;
+      const maxLeft = containerWidth - buttonWidth;
+      const maxTop = containerHeight - buttonHeight;
+      const randomLeft = Math.random() * maxLeft;
+      const randomTop = Math.random() * maxTop;
+      generatorButton.style.left = randomLeft + "px";
+      generatorButton.style.top = randomTop + "px";
+    }
+
+    // -------------------------------
+    // Tab Switching Logic
+    // -------------------------------
+    function showTab(tabName) {
+      if (tabName === 'main') {
+        mainGameTab.classList.add('active');
+        generatorTab.classList.remove('active');
+      } else if (tabName === 'generator') {
+        mainGameTab.classList.remove('active');
+        generatorTab.classList.add('active');
+      }
+    }
+
+    mainTabButton.addEventListener("click", () => showTab('main'));
+    generatorTabButton.addEventListener("click", () => {
+      if (!generatorTabButton.disabled) {
+        showTab('generator');
+      }
+    });
+
+    // -------------------------------
+    // Main Game Interactions
+    // -------------------------------
+    // Clicking the main square awards coins based on effective coin gain
+    square.addEventListener("click", function() {
+      coins += effectiveCoinGain();
+      updateDisplay();
+      animateSquare();
+    });
+
+    // Upgrade square quality button
+    upgradeQualityButton.addEventListener("click", function() {
+      if (coins >= upgradeCost) {
+        coins -= upgradeCost;
+        quality++;
+        upgradeCost = Math.floor(upgradeCost * 1.5);
+        updateDisplay();
+        animateSquare();
+
+        // Update the background gradient for fun visuals without changing the size.
+        let red = Math.min(255, quality * 25);
+        let blue = Math.max(0, 255 - quality * 15);
+        square.style.background = `radial-gradient(circle at top left, rgb(${red}, 100, ${blue}), #3742fa)`;
+      } else {
+        alert("Not enough coins to upgrade square quality!");
+      }
+    });
+
+    // Upgrade coin multiplier button
+    upgradeMultiplierButton.addEventListener("click", function() {
+      if (coins >= multiplierCost) {
+        coins -= multiplierCost;
+        multiplier += 0.5;
+        multiplierCost = Math.floor(multiplierCost * 1.7);
+        updateDisplay();
+        animateSquare();
+      } else {
+        alert("Not enough coins for multiplier upgrade!");
+      }
+    });
+
+    // Passive coin generation: every second, add coins based on base coinGain
+    setInterval(function() {
+      coins += coinGain();
+      updateDisplay();
+    }, 1000);
+
+    // -------------------------------
+    // Square Generator Interactions
+    // -------------------------------
+    // Clicking the generator button creates a new extra square and moves the button randomly
+    generatorButton.addEventListener("click", function() {
+      extraSquares++;
+      updateSquaresGrid();
+      updateDisplay();
+      moveGeneratorButton();
+    });
+
+    // Initial display updates
+    updateDisplay();
+    updateSquaresGrid();
+    // Place the generator button at a random starting position
+    moveGeneratorButton();
+  </script>
+</body>
+</html>
