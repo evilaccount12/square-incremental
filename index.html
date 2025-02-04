@@ -276,19 +276,7 @@
       }, 300);
     }
 
-    // Randomly move the generator button within its container
-    function moveGeneratorButton() {
-      const containerWidth = generatorButtonContainer.clientWidth;
-      const containerHeight = generatorButtonContainer.clientHeight;
-      const buttonWidth = generatorButton.offsetWidth;
-      const buttonHeight = generatorButton.offsetHeight;
-      const maxLeft = containerWidth - buttonWidth;
-      const maxTop = containerHeight - buttonHeight;
-      const randomLeft = Math.random() * maxLeft;
-      const randomTop = Math.random() * maxTop;
-      generatorButton.style.left = randomLeft + "px";
-      generatorButton.style.top = randomTop + "px";
-    }
+    // Randomly move the generator button within its containe
 
     // -------------------------------
     // Tab Switching Logic
@@ -365,14 +353,11 @@
       extraSquares++;
       updateSquaresGrid();
       updateDisplay();
-      moveGeneratorButton();
     });
 
     // Initial display updates
     updateDisplay();
     updateSquaresGrid();
-    // Place the generator button at a random starting position
-    moveGeneratorButton();
   </script>
 </body>
 </html>
