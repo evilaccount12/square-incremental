@@ -129,27 +129,21 @@
 }
 
 
-    #generatorButton {
-      position: absolute;
-      background: linear-gradient(45deg, #6a11cb, #2575fc);
-      border: none;
-      border-radius: 8px;
-      color: #fff;
-      padding: 10px 15px;
-      font-size: 1em;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: background 0.3s, transform 0.2s;
-    }
+   #generatorButton {
+    position: fixed; /* Keeps the button in place */
+    bottom: 20px;    /* Adjust position if needed */
+    right: 20px;
+    z-index: 10;     /* Ensures it stays on top */
+}
     #generatorButton:hover {
       transform: translateY(-2px);
     }
     #squaresGrid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
+    display: flex;
+    flex-wrap: wrap;  /* Ensures new rows don’t push the button */
+    gap: 5px;         /* Adds space between squares */
+    max-width: 400px; /* Adjust this based on how many squares fit per row */
+}
     .small-square {
       width: 40px;
       height: 40px;
@@ -202,7 +196,7 @@
     // -------------------------------
     // Game State Variables
     // -------------------------------
-    let coins = 999;
+    let coins = 100;
     let quality = 1;
     let upgradeCost = 10;
     let multiplier = 1.0;
