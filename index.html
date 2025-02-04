@@ -244,7 +244,7 @@
 
     // Update all display elements
     function updateDisplay() {
-      coinsDisplay.textContent = coins.toFixed(1);
+      coinsDisplay.textContent = trunc(coins.toFixed(1));
       qualityDisplay.textContent = quality;
       upgradeCostDisplay.textContent = upgradeCost;
       multiplierDisplay.textContent = multiplier.toFixed(1);
