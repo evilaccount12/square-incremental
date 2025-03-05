@@ -3,85 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <title>Social Credit Simulator</title>
+  <!-- Import Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    /* Global Styles */
     body {
-      background: #f9f9f9;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
       margin: 0;
+      padding: 20px;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #f3f3f3, #e0e0e0);
+      color: #333;
+      text-align: center;
       user-select: none;
     }
     h1 {
-      color: #d50000;
+      font-size: 2.5rem;
+      margin-bottom: 5px;
+      color: #c62828;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
+    h2, h3 {
+      margin: 10px 0;
+    }
+    /* Flag Image */
     #flag {
-      width: 200px;
+      width: 220px;
       cursor: pointer;
-      margin: 20px;
+      margin: 20px auto;
+      transition: transform 0.2s;
     }
+    #flag:hover {
+      transform: scale(1.05);
+    }
+    /* Upgrade Cards Container */
     #upgrades, #auto-clickers, #global-upgrades {
-      margin-top: 30px;
+      margin: 30px auto;
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
+      max-width: 900px;
     }
+    /* Card Style for Upgrades */
     .upgrade, .autoclicker, .global-upgrade {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
       margin: 10px;
-      padding: 10px 15px;
-      background: #ddd;
-      border-radius: 5px;
+      width: 200px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       cursor: pointer;
-      transition: background 0.3s;
-      min-width: 180px;
+      transition: background 0.3s, transform 0.2s;
     }
-    .upgrade:hover:not(.disabled),
-    .autoclicker:hover:not(.disabled),
+    .upgrade:hover:not(.disabled), 
+    .autoclicker:hover:not(.disabled), 
     .global-upgrade:hover:not(.disabled) {
-      background: #ccc;
+      background: #f0f0f0;
+      transform: translateY(-3px);
     }
     .disabled {
       opacity: 0.5;
       pointer-events: none;
     }
+    /* Event Log */
     #event-log {
       margin-top: 20px;
-      font-weight: bold;
-      color: #444;
+      font-weight: 700;
+      color: #555;
+      font-size: 1.1rem;
     }
-    /* Trump Call UI (top left) */
+    /* Trump Call UI */
     #trump-call {
       position: fixed;
-      top: 10px;
-      left: 10px;
-      width: 400px;
-      height: 100px;
-      display: none; /* Hidden by default */
+      top: 20px;
+      left: 20px;
+      width: 350px;
+      padding: 15px;
+      background: linear-gradient(135deg, #fff, #f7f7f7);
+      border: 2px solid #c62828;
+      border-radius: 10px;
+      display: none;
       z-index: 1000;
-      background-color: #fff;
-      border: 2px solid #d50000;
-      border-radius: 8px;
-      display: flex;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       align-items: center;
-      padding: 10px;
-      box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
     }
-    /* Left part: text */
     .trump-text {
       flex: 2;
-      font-size: 18px;
-      color: #000;
+      font-size: 1rem;
+      color: #333;
       text-align: left;
     }
-    /* Right part: image */
     .trump-image {
       flex: 1;
       text-align: right;
     }
     .trump-image img {
-      max-width: 80px;
-      max-height: 80px;
+      max-width: 60px;
+      max-height: 60px;
       border-radius: 50%;
+      border: 2px solid #c62828;
+    }
+    /* Background track remains hidden visually */
+    audio {
+      display: none;
     }
   </style>
 </head>
@@ -90,6 +113,7 @@
   <h2>📊 Social Credit: <span id="credit">0</span></h2>
   <img id="flag" src="china.png" alt="Chinese Flag" draggable="false">
   <h3>🏅 Rank: <span id="rank">Citizen</span></h3>
+
   <h3>⚙️ Click Upgrades</h3>
   <div id="upgrades">
     <div id="click-upgrade-1" class="upgrade">
@@ -108,6 +132,7 @@
       +10 per click
     </div>
   </div>
+
   <h3>🤖 Auto-Clickers</h3>
   <div id="auto-clickers">
     <div id="autoclicker-1" class="autoclicker">
@@ -126,6 +151,7 @@
       +10 per sec
     </div>
   </div>
+
   <h3>🌐 Global Upgrades</h3>
   <div id="global-upgrades">
     <div id="global-upgrade-1" class="global-upgrade">
@@ -144,9 +170,11 @@
       Reduce negative event impact by 50%
     </div>
   </div>
+
   <h3>⚠️ Government Inspections</h3>
   <p id="event-log">No inspections yet...</p>
-  <!-- Trump Call UI: rectangle with text on left and Trump image on right -->
+
+  <!-- Trump Call UI -->
   <div id="trump-call">
     <div class="trump-text">
       <span id="trump-message"></span>
@@ -155,15 +183,18 @@
       <img src="trump.png" alt="Donald Trump">
     </div>
   </div>
+
   <!-- Background track -->
   <audio id="bg-track" src="background.mp3" autoplay loop></audio>
+
   <script>
     // Game state variables
     let credit = 0;
-    let clickValue = 1;       // Base social credit per click
-    let autoCredit = 0;       // Passive social credit per second
+    let clickValue = 1; // Base social credit per click
+    let autoCredit = 0; // Passive social credit per second
     let globalMultiplier = 1; // Multiplier from global upgrades
     let negativeEventReduction = 1; // Reduction factor for negative events
+
     // Display elements
     const creditDisplay = document.getElementById('credit');
     const rankDisplay = document.getElementById('rank');
@@ -171,6 +202,7 @@
     const flag = document.getElementById('flag');
     const trumpCall = document.getElementById('trump-call');
     const trumpMessage = document.getElementById('trump-message');
+
     // Upgrade cost definitions (these scale up after each purchase)
     let clickUpgradeCosts = {
       "click-upgrade-1": 50,
@@ -187,6 +219,7 @@
       "global-upgrade-2": 2500,
       "global-upgrade-3": 5000
     };
+
     // Upgrade effects (values added per purchase)
     const clickUpgradeEffects = {
       "click-upgrade-1": 1,
@@ -204,6 +237,7 @@
       "global-upgrade-2": false,
       "global-upgrade-3": false
     };
+
     // Update displays and enable/disable upgrade buttons based on available credit
     function updateDisplay() {
       creditDisplay.textContent = Math.floor(credit);
@@ -211,13 +245,13 @@
       document.getElementById('click-upgrade-1-cost').textContent = clickUpgradeCosts["click-upgrade-1"];
       document.getElementById('click-upgrade-2-cost').textContent = clickUpgradeCosts["click-upgrade-2"];
       document.getElementById('click-upgrade-3-cost').textContent = clickUpgradeCosts["click-upgrade-3"];
-      
       document.getElementById('autoclicker-1-cost').textContent = autoClickerCosts["autoclicker-1"];
       document.getElementById('autoclicker-2-cost').textContent = autoClickerCosts["autoclicker-2"];
       document.getElementById('autoclicker-3-cost').textContent = autoClickerCosts["autoclicker-3"];
       document.getElementById('global-upgrade-1-cost').textContent = globalUpgradeCosts["global-upgrade-1"];
       document.getElementById('global-upgrade-2-cost').textContent = globalUpgradeCosts["global-upgrade-2"];
       document.getElementById('global-upgrade-3-cost').textContent = globalUpgradeCosts["global-upgrade-3"];
+
       // Toggle availability for click upgrades
       Object.keys(clickUpgradeCosts).forEach(id => {
         document.getElementById(id).classList.toggle('disabled', credit < clickUpgradeCosts[id]);
@@ -235,6 +269,7 @@
         }
       });
     }
+
     // Determine player's rank based on current social credit
     function getRank() {
       if (credit >= 10000) return "Supreme Leader";
@@ -243,11 +278,13 @@
       if (credit >= 1000) return "Respected Party Member";
       return "Citizen";
     }
+
     // Clicking the flag adds social credit (applying both the click value and global multiplier)
     flag.addEventListener('click', () => {
       credit += clickValue * globalMultiplier;
       updateDisplay();
     });
+
     // Purchase a click upgrade, increasing clickValue and scaling its cost
     function buyClickUpgrade(id) {
       let cost = clickUpgradeCosts[id];
@@ -258,6 +295,7 @@
         updateDisplay();
       }
     }
+
     // Purchase an auto-clicker, increasing passive income and scaling its cost
     function buyAutoClicker(id) {
       let cost = autoClickerCosts[id];
@@ -268,6 +306,7 @@
         updateDisplay();
       }
     }
+
     // Purchase a global upgrade (only once per upgrade)
     function buyGlobalUpgrade(id) {
       let cost = globalUpgradeCosts[id];
@@ -277,13 +316,14 @@
         if (id === "global-upgrade-1") {
           globalMultiplier *= 1.2; // Boost all gains by 20%
         } else if (id === "global-upgrade-2") {
-          autoCredit *= 1.5;       // Boost auto-clickers by 50%
+          autoCredit *= 1.5; // Boost auto-clickers by 50%
         } else if (id === "global-upgrade-3") {
           negativeEventReduction = 0.5; // Halve the impact of negative events
         }
         updateDisplay();
       }
     }
+
     // Attach event listeners to upgrades
     document.getElementById('click-upgrade-1').addEventListener('click', () => buyClickUpgrade("click-upgrade-1"));
     document.getElementById('click-upgrade-2').addEventListener('click', () => buyClickUpgrade("click-upgrade-2"));
@@ -294,11 +334,13 @@
     document.getElementById('global-upgrade-1').addEventListener('click', () => buyGlobalUpgrade("global-upgrade-1"));
     document.getElementById('global-upgrade-2').addEventListener('click', () => buyGlobalUpgrade("global-upgrade-2"));
     document.getElementById('global-upgrade-3').addEventListener('click', () => buyGlobalUpgrade("global-upgrade-3"));
+
     // Passive income: auto-clickers add social credit each second (multiplied by the global multiplier)
     setInterval(() => {
       credit += autoCredit * globalMultiplier;
       updateDisplay();
     }, 1000);
+
     // Random events: government inspections that become more severe at higher credit levels.
     function randomEvent() {
       let eventChance = Math.random();
@@ -340,6 +382,7 @@
         eventInterval -= 1000;
       }
     }, 30000);
+
     // Trump call messages
     const trumpMessages = [
       "You're fired!",
@@ -358,8 +401,9 @@
         trumpCall.style.display = "none";
       }, 4000);
     }
-    // Trigger a Trump call every 25 seconds (adjust as needed)
+    // Trigger a Trump call every 25 seconds
     setInterval(triggerTrumpCall, 25000);
+
     // Initialize display
     updateDisplay();
   </script>
