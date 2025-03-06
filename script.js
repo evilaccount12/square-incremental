@@ -5,10 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let globalMultiplier = 1;
   let negativeEventReduction = 1;
 
-  const creditDisplay = document.getElementById("credit");
-  const rankDisplay = document.getElementById("rank");
-  const eventLog = document.getElementById("event-log");
-  const flag = document.getElementById("flag");
+  const creditDisplay = document.getElementById('credit');
+  const rankDisplay = document.getElementById('rank');
+  const eventLog = document.getElementById('event-log');
+  const flag = document.getElementById('flag');
+  const trumpCall = document.getElementById('trump-call');
+  const trumpMessage = document.getElementById('trump-message');
 
   function updateDisplay() {
     creditDisplay.textContent = Math.floor(credit);
@@ -23,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return "Citizen";
   }
 
-  flag.addEventListener("click", () => {
+  flag.addEventListener('click', () => {
     credit += clickValue * globalMultiplier;
     updateDisplay();
   });
@@ -34,19 +36,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 1000);
 
   function randomEvent() {
-    let eventChance = Math.random();
-    let event;
-    if (credit >= 5000) {
-      event = eventChance < 0.5 ? { text: "🚨 Crackdown! -200 SC", effect: -200 } : { text: "📢 Propaganda bonus! +150 SC", effect: 150 };
-    } else {
-      event = eventChance < 0.5 ? { text: "📢 Local commendation! +50 SC", effect: 50 } : { text: "🚨 Minor infraction! -30 SC", effect: -30 };
-    }
-    if (event.effect < 0) event.effect *= negativeEventReduction;
-    credit += event.effect;
+    let event = Math.random() < 0.5 ? { text: "🚨 Inspection! -50 SC", effect: -50 } : { text: "💰 Bonus! +50 SC", effect: 50 };
+    credit += event.effect * negativeEventReduction;
     if (credit < 0) credit = 0;
     eventLog.textContent = event.text;
     updateDisplay();
   }
-
   setInterval(randomEvent, 20000);
+
+  const trumpMessages = [
+    "You're fired!",
+    "Make Social Credit Great Again!",
+    "Nobody builds social credit like me!",
+    "Fake news!"
+  ];
+  function triggerTrumpCall() {
+    trumpMessage.textContent = trumpMessages[Math.floor(Math.random() * trumpMessages.length)];
+    trumpCall.style.display = "block";
+    setTimeout(() => { trumpCall.style.display = "none"; }, 4000);
+  }
+  setInterval(triggerTrumpCall, 25000);
+
+  updateDisplay();
 });
