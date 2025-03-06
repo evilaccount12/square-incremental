@@ -93,8 +93,17 @@ h2, h3 {
   background: #222;
   color: red;
   border: 3px solid red;
-  display: none;
   text-transform: uppercase;
+  display: none;
+  /* Use flex to align portrait and message */
+  display: flex;
+  align-items: center;
+}
+
+#trump-portrait {
+  width: 50px;
+  height: auto;
+  margin-right: 10px;
 }
 
 /* Hide audio element */
