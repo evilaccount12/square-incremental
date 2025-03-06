@@ -1,102 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Social Credit Simulator 2026</title>
-  <style>
-    /* Brutalist, primitive style (from first script) */
-    body {
-      background: #000;
-      color: #fff;
-      font-family: 'Courier New', monospace;
-      text-align: center;
-      padding: 20px;
-      margin: 0;
-      user-select: none;
-    }
-    h1 {
-      background: red;
-      color: black;
-      padding: 10px;
-      text-transform: uppercase;
-      font-size: 24px;
-      margin-bottom: 10px;
-      border: 3px solid red;
-    }
-    h2, h3 {
-      margin: 10px 0;
-      text-transform: uppercase;
-    }
-    /* Flag styling */
-    #flag {
-      width: 200px;
-      cursor: pointer;
-      margin: 20px;
-      filter: grayscale(100%);
-      transition: transform 0.2s;
-    }
-    #flag:hover {
-      transform: scale(1.05);
-    }
-    /* Upgrade sections */
-    #upgrades, #auto-clickers, #global-upgrades {
-      margin: 20px auto;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      max-width: 900px;
-    }
-    .upgrade, .autoclicker, .global-upgrade {
-      background: #222;
-      color: red;
-      padding: 10px;
-      border: 3px solid red;
-      cursor: pointer;
-      margin: 5px;
-      text-transform: uppercase;
-      transition: background 0.3s;
-      min-width: 180px;
-    }
-    .upgrade:hover:not(.disabled),
-    .autoclicker:hover:not(.disabled),
-    .global-upgrade:hover:not(.disabled) {
-      background: #333;
-    }
-    .disabled {
-      opacity: 0.3;
-      pointer-events: none;
-    }
-    /* Event log positioned at the top right */
-    #event-log {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: #fff;
-      color: #000;
-      padding: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: left;
-      border: 3px solid red;
-    }
-    /* Trump Call UI (optional) */
-    #trump-call {
-      position: fixed;
-      top: 70px;
-      left: 10px;
-      width: 300px;
-      padding: 10px;
-      background: #222;
-      color: red;
-      border: 3px solid red;
-      display: none;
-      text-transform: uppercase;
-    }
-    /* Hide audio element */
-    audio {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <h1>Social Credit Simulator 2026</h1>
@@ -107,288 +15,36 @@
   <!-- Click Upgrades -->
   <h3>Click Upgrades</h3>
   <div id="upgrades">
-    <div id="click-upgrade-1" class="upgrade">
-      Propaganda Poster<br>
-      Cost: <span id="click-upgrade-1-cost">50</span> SC<br>
-      +1 per click
-    </div>
-    <div id="click-upgrade-2" class="upgrade">
-      Party Recruitment<br>
-      Cost: <span id="click-upgrade-2-cost">150</span> SC<br>
-      +3 per click
-    </div>
-    <div id="click-upgrade-3" class="upgrade">
-      Elite Endorsement<br>
-      Cost: <span id="click-upgrade-3-cost">500</span> SC<br>
-      +10 per click
-    </div>
+    <div id="click-upgrade-1" class="upgrade">Propaganda Poster<br>Cost: <span id="click-upgrade-1-cost">50</span> SC<br>+1 per click</div>
+    <div id="click-upgrade-2" class="upgrade">Party Recruitment<br>Cost: <span id="click-upgrade-2-cost">150</span> SC<br>+3 per click</div>
+    <div id="click-upgrade-3" class="upgrade">Elite Endorsement<br>Cost: <span id="click-upgrade-3-cost">500</span> SC<br>+10 per click</div>
   </div>
 
   <!-- Auto-Clickers -->
   <h3>Auto-Clickers</h3>
   <div id="auto-clickers">
-    <div id="autoclicker-1" class="autoclicker">
-      Loyalty Officer<br>
-      Cost: <span id="autoclicker-1-cost">200</span> SC<br>
-      +1 per sec
-    </div>
-    <div id="autoclicker-2" class="autoclicker">
-      Surveillance Drone<br>
-      Cost: <span id="autoclicker-2-cost">600</span> SC<br>
-      +4 per sec
-    </div>
-    <div id="autoclicker-3" class="autoclicker">
-      Central Command AI<br>
-      Cost: <span id="autoclicker-3-cost">1500</span> SC<br>
-      +10 per sec
-    </div>
+    <div id="autoclicker-1" class="autoclicker">Loyalty Officer<br>Cost: <span id="autoclicker-1-cost">200</span> SC<br>+1 per sec</div>
+    <div id="autoclicker-2" class="autoclicker">Surveillance Drone<br>Cost: <span id="autoclicker-2-cost">600</span> SC<br>+4 per sec</div>
+    <div id="autoclicker-3" class="autoclicker">Central Command AI<br>Cost: <span id="autoclicker-3-cost">1500</span> SC<br>+10 per sec</div>
   </div>
 
   <!-- Global Upgrades -->
   <h3>Global Upgrades</h3>
   <div id="global-upgrades">
-    <div id="global-upgrade-1" class="global-upgrade">
-      State Propaganda<br>
-      Cost: <span id="global-upgrade-1-cost">800</span> SC<br>
-      Boost all gains by 20%
-    </div>
-    <div id="global-upgrade-2" class="global-upgrade">
-      Economic Stimulus<br>
-      Cost: <span id="global-upgrade-2-cost">2500</span> SC<br>
-      Boost auto-clickers by 50%
-    </div>
-    <div id="global-upgrade-3" class="global-upgrade">
-      Regime Stability<br>
-      Cost: <span id="global-upgrade-3-cost">5000</span> SC<br>
-      Reduce negative event impact by 50%
-    </div>
+    <div id="global-upgrade-1" class="global-upgrade">State Propaganda<br>Cost: <span id="global-upgrade-1-cost">800</span> SC<br>Boost all gains by 20%</div>
+    <div id="global-upgrade-2" class="global-upgrade">Economic Stimulus<br>Cost: <span id="global-upgrade-2-cost">2500</span> SC<br>Boost auto-clickers by 50%</div>
+    <div id="global-upgrade-3" class="global-upgrade">Regime Stability<br>Cost: <span id="global-upgrade-3-cost">5000</span> SC<br>Reduce negative event impact by 50%</div>
   </div>
 
-  <!-- Event Log (Top Right) -->
+  <!-- Event Log -->
   <div id="event-log">No events yet...</div>
-  
-  <!-- Trump Call UI (Optional) -->
+
+  <!-- Trump Call UI -->
   <div id="trump-call"><span id="trump-message"></span></div>
-  
-  <!-- Background track (optional) -->
+
+  <!-- Background track -->
   <audio id="bg-track" src="background.mp3" autoplay loop></audio>
-  
-  <script>
-    // Game state variables
-    let credit = 0;
-    let clickValue = 1;       // Base social credit per click
-    let autoCredit = 0;       // Passive social credit per second
-    let globalMultiplier = 1; // Multiplier from global upgrades
-    let negativeEventReduction = 1; // Reduction factor for negative events
 
-    // Display elements
-    const creditDisplay = document.getElementById('credit');
-    const rankDisplay = document.getElementById('rank');
-    const eventLog = document.getElementById('event-log');
-    const flag = document.getElementById('flag');
-    const trumpCall = document.getElementById('trump-call');
-    const trumpMessage = document.getElementById('trump-message');
-
-    // Upgrade cost definitions (scale up after purchase)
-    let clickUpgradeCosts = {
-      "click-upgrade-1": 50,
-      "click-upgrade-2": 150,
-      "click-upgrade-3": 500
-    };
-    let autoClickerCosts = {
-      "autoclicker-1": 200,
-      "autoclicker-2": 600,
-      "autoclicker-3": 1500
-    };
-    let globalUpgradeCosts = {
-      "global-upgrade-1": 800,
-      "global-upgrade-2": 2500,
-      "global-upgrade-3": 5000
-    };
-
-    // Upgrade effects
-    const clickUpgradeEffects = {
-      "click-upgrade-1": 1,
-      "click-upgrade-2": 3,
-      "click-upgrade-3": 10
-    };
-    const autoClickerEffects = {
-      "autoclicker-1": 1,
-      "autoclicker-2": 4,
-      "autoclicker-3": 10
-    };
-
-    // Global upgrades can be purchased only once
-    let globalUpgradesPurchased = {
-      "global-upgrade-1": false,
-      "global-upgrade-2": false,
-      "global-upgrade-3": false
-    };
-
-    // Update display function
-    function updateDisplay() {
-      creditDisplay.textContent = Math.floor(credit);
-      rankDisplay.textContent = getRank();
-      document.getElementById('click-upgrade-1-cost').textContent = clickUpgradeCosts["click-upgrade-1"];
-      document.getElementById('click-upgrade-2-cost').textContent = clickUpgradeCosts["click-upgrade-2"];
-      document.getElementById('click-upgrade-3-cost').textContent = clickUpgradeCosts["click-upgrade-3"];
-      document.getElementById('autoclicker-1-cost').textContent = autoClickerCosts["autoclicker-1"];
-      document.getElementById('autoclicker-2-cost').textContent = autoClickerCosts["autoclicker-2"];
-      document.getElementById('autoclicker-3-cost').textContent = autoClickerCosts["autoclicker-3"];
-      document.getElementById('global-upgrade-1-cost').textContent = globalUpgradeCosts["global-upgrade-1"];
-      document.getElementById('global-upgrade-2-cost').textContent = globalUpgradeCosts["global-upgrade-2"];
-      document.getElementById('global-upgrade-3-cost').textContent = globalUpgradeCosts["global-upgrade-3"];
-
-      // Toggle disabled state for upgrades
-      Object.keys(clickUpgradeCosts).forEach(id => {
-        document.getElementById(id).classList.toggle('disabled', credit < clickUpgradeCosts[id]);
-      });
-      Object.keys(autoClickerCosts).forEach(id => {
-        document.getElementById(id).classList.toggle('disabled', credit < autoClickerCosts[id]);
-      });
-      Object.keys(globalUpgradeCosts).forEach(id => {
-        if (globalUpgradesPurchased[id]) {
-          document.getElementById(id).classList.add('disabled');
-        } else {
-          document.getElementById(id).classList.toggle('disabled', credit < globalUpgradeCosts[id]);
-        }
-      });
-    }
-
-    // Determine player's rank based on current social credit
-    function getRank() {
-      if (credit >= 10000) return "Supreme Leader";
-      if (credit >= 5000) return "High-Ranking Official";
-      if (credit >= 2000) return "Trusted Citizen";
-      if (credit >= 1000) return "Respected Party Member";
-      return "Citizen";
-    }
-
-    // Clicking the flag adds social credit (applying both the click value and global multiplier)
-    flag.addEventListener('click', () => {
-      credit += clickValue * globalMultiplier;
-      updateDisplay();
-    });
-
-    // Purchase a click upgrade
-    function buyClickUpgrade(id) {
-      let cost = clickUpgradeCosts[id];
-      if (credit >= cost) {
-        credit -= cost;
-        clickValue += clickUpgradeEffects[id];
-        clickUpgradeCosts[id] = Math.floor(cost * 1.5);
-        updateDisplay();
-      }
-    }
-
-    // Purchase an auto-clicker
-    function buyAutoClicker(id) {
-      let cost = autoClickerCosts[id];
-      if (credit >= cost) {
-        credit -= cost;
-        autoCredit += autoClickerEffects[id];
-        autoClickerCosts[id] = Math.floor(cost * 1.5);
-        updateDisplay();
-      }
-    }
-
-    // Purchase a global upgrade (only once per upgrade)
-    function buyGlobalUpgrade(id) {
-      let cost = globalUpgradeCosts[id];
-      if (credit >= cost && !globalUpgradesPurchased[id]) {
-        credit -= cost;
-        globalUpgradesPurchased[id] = true;
-        if (id === "global-upgrade-1") {
-          globalMultiplier *= 1.2; // Boost all gains by 20%
-        } else if (id === "global-upgrade-2") {
-          autoCredit *= 1.5;       // Boost auto-clickers by 50%
-        } else if (id === "global-upgrade-3") {
-          negativeEventReduction = 0.5; // Halve the impact of negative events
-        }
-        updateDisplay();
-      }
-    }
-
-    // Attach event listeners to upgrades
-    document.getElementById('click-upgrade-1').addEventListener('click', () => buyClickUpgrade("click-upgrade-1"));
-    document.getElementById('click-upgrade-2').addEventListener('click', () => buyClickUpgrade("click-upgrade-2"));
-    document.getElementById('click-upgrade-3').addEventListener('click', () => buyClickUpgrade("click-upgrade-3"));
-    document.getElementById('autoclicker-1').addEventListener('click', () => buyAutoClicker("autoclicker-1"));
-    document.getElementById('autoclicker-2').addEventListener('click', () => buyAutoClicker("autoclicker-2"));
-    document.getElementById('autoclicker-3').addEventListener('click', () => buyAutoClicker("autoclicker-3"));
-    document.getElementById('global-upgrade-1').addEventListener('click', () => buyGlobalUpgrade("global-upgrade-1"));
-    document.getElementById('global-upgrade-2').addEventListener('click', () => buyGlobalUpgrade("global-upgrade-2"));
-    document.getElementById('global-upgrade-3').addEventListener('click', () => buyGlobalUpgrade("global-upgrade-3"));
-
-    // Passive income: auto-clickers add social credit each second (multiplied by the global multiplier)
-    setInterval(() => {
-      credit += autoCredit * globalMultiplier;
-      updateDisplay();
-    }, 1000);
-
-    // Random events: government inspections that become more severe at higher credit levels.
-    function randomEvent() {
-      let eventChance = Math.random();
-      let event;
-      if (credit >= 5000) {
-        if (eventChance < 0.4) {
-          event = { text: "🚨 Government crackdown! -200 SC", effect: -200 };
-        } else if (eventChance < 0.7) {
-          event = { text: "⚠️ Unexpected audit! -100 SC", effect: -100 };
-        } else if (eventChance < 0.9) {
-          event = { text: "📢 Propaganda bonus! +150 SC", effect: +150 };
-        } else {
-          event = { text: "🔍 Random inspection! -50 SC", effect: -50 };
-        }
-      } else {
-        if (eventChance < 0.3) {
-          event = { text: "📢 Local commendation! +50 SC", effect: +50 };
-        } else if (eventChance < 0.6) {
-          event = { text: "🚨 Minor infraction! -30 SC", effect: -30 };
-        } else {
-          event = { text: "💰 Small bonus! +20 SC", effect: +20 };
-        }
-      }
-      // Apply negative event reduction (if any)
-      if (event.effect < 0) {
-        event.effect *= negativeEventReduction;
-      }
-      credit += event.effect;
-      if (credit < 0) credit = 0;
-      eventLog.textContent = event.text;
-      updateDisplay();
-    }
-    // Initial random event interval (20 seconds)
-    let eventInterval = 20000;
-    setInterval(randomEvent, eventInterval);
-    // Gradually reduce the interval for random events (but never less than 5 seconds)
-    setInterval(() => {
-      if (eventInterval > 5000) {
-        eventInterval -= 1000;
-      }
-    }, 30000);
-
-    // Trump call messages
-    const trumpMessages = [
-      "You're fired!",
-      "Make Social Credit Great Again!",
-      "Nobody builds social credit like me!",
-      "I know the best social credit, believe me!",
-      "Fake news!"
-    ];
-    // Show the Trump call UI with a random message
-    function triggerTrumpCall() {
-      let message = trumpMessages[Math.floor(Math.random() * trumpMessages.length)];
-      trumpMessage.textContent = message;
-      trumpCall.style.display = "block";
-      setTimeout(() => { 
-        trumpCall.style.display = "none"; 
-      }, 4000);
-    }
-    setInterval(triggerTrumpCall, 25000);
-
-    // Initialize display
-    updateDisplay();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
