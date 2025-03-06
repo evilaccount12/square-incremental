@@ -8,7 +8,6 @@ body {
   margin: 0;
   user-select: none;
 }
-
 h1 {
   background: red;
   color: black;
@@ -18,7 +17,6 @@ h1 {
   margin-bottom: 10px;
   border: 3px solid red;
 }
-
 h2, h3 {
   margin: 10px 0;
   text-transform: uppercase;
@@ -32,7 +30,6 @@ h2, h3 {
   filter: grayscale(100%);
   transition: transform 0.2s;
 }
-
 #flag:hover {
   transform: scale(1.05);
 }
@@ -45,7 +42,6 @@ h2, h3 {
   flex-wrap: wrap;
   max-width: 900px;
 }
-
 .upgrade, .autoclicker, .global-upgrade {
   background: #222;
   color: red;
@@ -57,19 +53,17 @@ h2, h3 {
   transition: background 0.3s;
   min-width: 180px;
 }
-
 .upgrade:hover:not(.disabled),
 .autoclicker:hover:not(.disabled),
 .global-upgrade:hover:not(.disabled) {
   background: #333;
 }
-
 .disabled {
   opacity: 0.3;
   pointer-events: none;
 }
 
-/* Event log */
+/* Event log positioned at the top right */
 #event-log {
   position: fixed;
   top: 10px;
